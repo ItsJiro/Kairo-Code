@@ -1,0 +1,48 @@
+name: Build Kairo
+
+on:
+  push:
+    branches:
+      - main
+      - kairo-remove-copilot
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build Kairo - Linux x64
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Kairo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Show environment
+        run: |
+          node --version
+          npm --version
+          free -h
+          nproc
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile Kairo
+        run: npm run compile
+
+      - name: Upload compiled Kairo
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kairo-linux-x64
+          path: |
+            out/
+            extensions/*/out/
