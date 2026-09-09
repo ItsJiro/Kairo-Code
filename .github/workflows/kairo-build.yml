@@ -31,6 +31,18 @@ jobs:
           npm --version
           free -h
           nproc
+          
+      - name: Install VS Code build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          build-essential \
+          g++ \
+          libx11-dev \
+          libxkbfile-dev \
+          libsecret-1-dev \
+          libkrb5-dev \
+          python-is-python3
 
       - name: Install dependencies
         run: npm install
